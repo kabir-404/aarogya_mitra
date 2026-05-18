@@ -1,132 +1,128 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import {
-  Stethoscope, Pill, MapPin, FlaskConical,
-  Baby, Brain, Users, FileText,
-  ArrowRight
+  Video, Pill, ScanLine, Landmark,
+  Building2, UserCheck, Home, Truck, BadgePercent, Check
 } from 'lucide-react'
 
-const services = [
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
+const SERVICES = [
   {
-    icon: Stethoscope,
-    title: 'Free Medical Consultation',
-    desc: 'Expert doctors available for free consultations. Get proper diagnosis and treatment plans without any financial burden.',
-    tags: ['Free', 'Daily Clinics'],
-    gradient: 'from-emerald-500 to-teal-600',
-    accent: '#0d9488',
+    title: '24×7 FREE Teleconsultation',
+    desc: 'Speak to a doctor anytime, anywhere',
+    Icon: Video,
+    color: 'green',
   },
   {
-    icon: Pill,
-    title: 'Affordable Medicines',
-    desc: 'Access quality generic medicines at up to 80% reduced rates through our pharmacy network and government tie-ups.',
-    tags: ['80% Savings', 'Generic Medicines'],
-    gradient: 'from-green-600 to-emerald-500',
-    accent: '#16a34a',
+    title: '40% Medicine Discount',
+    desc: 'On all prescribed medicines',
+    Icon: Pill,
+    color: 'blue',
   },
   {
-    icon: MapPin,
-    title: 'Hospital Navigation',
-    desc: 'We guide patients through the complex hospital system, from registration to specialist referrals and follow-ups.',
-    tags: ['Patient Advocacy', '50+ Hospitals'],
-    gradient: 'from-teal-600 to-cyan-500',
-    accent: '#0891b2',
+    title: '30-40% Diagnostic Discount',
+    desc: 'MRI, CT scans & pathology tests',
+    Icon: ScanLine,
+    color: 'orange',
   },
   {
-    icon: FlaskConical,
-    title: 'Diagnostic Assistance',
-    desc: 'Helping patients access blood tests, X-rays, and advanced diagnostics at subsidised rates through partner labs.',
-    tags: ['Subsidised Tests', 'Quick Reports'],
-    gradient: 'from-primary to-primary-medium',
-    accent: '#0a3d2b',
+    title: 'Government Scheme Navigation',
+    desc: 'Expert guidance for eligible schemes',
+    Icon: Landmark,
+    color: 'green',
   },
   {
-    icon: Baby,
-    title: 'Women & Child Health',
-    desc: 'Dedicated programs for maternal care, child nutrition, immunisation drives, and women wellness awareness camps.',
-    tags: ['Maternal Care', 'Child Nutrition'],
-    gradient: 'from-rose-500 to-pink-500',
-    accent: '#e11d48',
+    title: 'Hospital Bill Reduction',
+    desc: 'Save 30-40% on hospitalization',
+    Icon: Building2,
+    color: 'blue',
   },
   {
-    icon: Brain,
-    title: 'Mental Health Support',
-    desc: 'Free counselling sessions, stress management workshops, and mental wellness resources for individuals and families.',
-    tags: ['Free Counselling', 'Workshops'],
-    gradient: 'from-violet-600 to-purple-500',
-    accent: '#7c3aed',
+    title: 'Expert Doctor Referrals',
+    desc: 'Based on budget & location',
+    Icon: UserCheck,
+    color: 'orange',
   },
   {
-    icon: Users,
-    title: 'Health Awareness Camps',
-    desc: 'Regular health camps in underprivileged colonies with free screenings for diabetes, BP, dental, and eye health.',
-    tags: ['Free Screening', 'Monthly Camps'],
-    gradient: 'from-orange-500 to-amber-500',
-    accent: '#d97706',
+    title: 'Home Visit Consultations',
+    desc: 'With IV therapy at home',
+    Icon: Home,
+    color: 'green',
   },
   {
-    icon: FileText,
-    title: 'Government Scheme Help',
-    desc: 'Enrolling eligible families in Ayushman Bharat, Mahatma Jyotiba Phule and other government health schemes.',
-    tags: ['Ayushman Bharat', 'MJPJAY'],
-    gradient: 'from-blue-600 to-indigo-500',
-    accent: '#2563eb',
+    title: '24/7 Emergency Ambulance',
+    desc: 'Immediate medical transport',
+    Icon: Truck,
+    color: 'blue',
+  },
+  {
+    title: 'Surgery Cost Negotiation',
+    desc: 'We negotiate on your behalf',
+    Icon: BadgePercent,
+    color: 'orange',
   },
 ]
 
+const colorMap = {
+  green: {
+    border: '#5DBB3F',
+    icon: '#5DBB3F',
+    iconBg: 'rgba(93,187,63,0.1)',
+    tag: 'rgba(93,187,63,0.08)',
+  },
+  blue: {
+    border: '#1E88E5',
+    icon: '#1E88E5',
+    iconBg: 'rgba(30,136,229,0.1)',
+    tag: 'rgba(30,136,229,0.08)',
+  },
+  orange: {
+    border: '#F57C00',
+    icon: '#F57C00',
+    iconBg: 'rgba(245,124,0,0.1)',
+    tag: 'rgba(245,124,0,0.08)',
+  },
+}
+
 function ServiceCard({ service, index }) {
-  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true })
-  const { icon: Icon, title, desc, tags, gradient, accent } = service
+  const [ref, inView] = useInView({ threshold: 0.08, triggerOnce: true })
+  const { title, desc, Icon, color } = service
+  const c = colorMap[color]
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.55, delay: (index % 4) * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-400 hover:-translate-y-2"
+      initial={{ opacity: 0, y: isMobile ? 0 : 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0 }}
+      transition={{
+        duration: isMobile ? 0.3 : 0.55,
+        delay: isMobile ? 0 : (index % 3) * 0.08,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="relative bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95 md:hover:scale-[1.02] cursor-pointer group"
+      style={{ minHeight: '100px' }}
     >
-      {/* Top accent bar */}
-      <div className={`h-1 w-full bg-gradient-to-r ${gradient}`} />
+      {/* Left orange accent bar */}
+      <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style={{ backgroundColor: c.border }} />
 
-      <div className="p-6">
-        {/* Icon */}
-        <div
-          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
-        >
-          <Icon className="w-6 h-6 text-white" />
-        </div>
-
-        {/* Content */}
-        <h3 className="font-display font-bold text-gray-900 text-lg mb-2 leading-tight">{title}</h3>
-        <p className="text-gray-500 text-sm leading-relaxed mb-4">{desc}</p>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-xs px-2.5 py-1 rounded-full font-medium"
-              style={{ background: `${accent}15`, color: accent }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Arrow */}
-        <div
-          className="flex items-center gap-1.5 text-sm font-semibold group-hover:gap-3 transition-all duration-300"
-          style={{ color: accent }}
-        >
-          Learn more
-          <ArrowRight className="w-4 h-4" />
-        </div>
+      {/* Green checkmark badge — top right */}
+      <div className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center"
+        style={{ backgroundColor: '#5DBB3F' }}>
+        <Check className="w-3 h-3 text-white" strokeWidth={3} />
       </div>
 
-      {/* Hover gradient wash */}
-      <div
-        className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-[0.04] transition-opacity duration-400 pointer-events-none`}
-      />
+      <div className="p-4 md:p-5 pl-5 md:pl-6">
+        {/* Icon */}
+        <div className="w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center mb-3"
+          style={{ backgroundColor: c.iconBg }}>
+          <Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: c.icon }} />
+        </div>
+
+        {/* Text */}
+        <h3 className="font-bold text-gray-900 text-sm md:text-base leading-snug mb-1 pr-5">{title}</h3>
+        <p className="text-gray-500 text-xs md:text-sm leading-relaxed">{desc}</p>
+      </div>
     </motion.div>
   )
 }
@@ -135,53 +131,51 @@ export default function Services() {
   const [headerRef, headerInView] = useInView({ threshold: 0.2, triggerOnce: true })
 
   return (
-    <section id="services" className="py-20 lg:py-28 bg-gray-50/60">
+    <section id="services" className="py-14 lg:py-24" style={{ backgroundColor: '#f8fafb' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <motion.div
           ref={headerRef}
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: isMobile ? 0 : 40 }}
           animate={headerInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-14"
+          transition={{ duration: isMobile ? 0.3 : 0.7 }}
+          className="text-center mb-10 lg:mb-14"
         >
-          <span className="inline-block px-4 py-1.5 bg-primary-light text-primary rounded-full text-sm font-semibold mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
+            style={{ backgroundColor: '#f0f7f0', color: '#5DBB3F', border: '1px solid #d4edcc' }}>
             Our Services
           </span>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-gray-900 mb-4">
-            Healthcare support at{' '}
-            <span className="text-gradient bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              every step
-            </span>
+          <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-gray-900 mb-3">
+            WHAT WE DO
           </h2>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-            From your first consultation to navigating government schemes — we're with you at every stage of your healthcare journey.
+          <p className="text-gray-500 text-base lg:text-lg max-w-2xl mx-auto">
+            From diagnosis to recovery, we&apos;re your single point of contact
           </p>
         </motion.div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {services.map((service, index) => (
+        {/* Grid: 2-col mobile, 3-col desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
+          {SERVICES.map((service, index) => (
             <ServiceCard key={service.title} service={service} index={index} />
           ))}
         </div>
 
-        {/* Bottom CTA */}
+        {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-12"
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-center mt-10"
         >
-          <p className="text-gray-500 mb-4">Need help choosing the right service?</p>
+          <p className="text-gray-500 mb-4 text-sm">Not sure which service you need?</p>
           <a
             href="tel:+9108149584719"
-            className="inline-flex items-center gap-2 px-8 py-3.5 bg-primary hover:bg-primary-medium text-white rounded-full font-semibold transition-all duration-200 hover:scale-105 hover:shadow-xl hover:shadow-primary/30"
+            className="inline-flex items-center gap-2 px-7 py-3.5 text-white rounded-full font-semibold text-sm transition-all duration-200 hover:scale-105 hover:shadow-xl"
+            style={{ backgroundColor: '#5DBB3F' }}
           >
-            <Stethoscope className="w-4 h-4" />
-            Talk to Our Team
+            Call Us — We&apos;ll Guide You
           </a>
         </motion.div>
       </div>

@@ -2,6 +2,8 @@ import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { CheckCircle, Heart, Users, Sparkles } from 'lucide-react'
 
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
 const checklist = [
   'Free medical consultations for low-income families',
   'Affordable medicines at subsidised rates',
@@ -12,107 +14,91 @@ const checklist = [
 ]
 
 const values = [
-  { icon: Heart, label: 'Compassionate Care', color: 'from-rose-500 to-pink-500', delay: 0 },
-  { icon: Users, label: 'Community First', color: 'from-primary to-primary-medium', delay: 0.15 },
-  { icon: Sparkles, label: 'Holistic Approach', color: 'from-accent to-accent-light', delay: 0.3 },
+  { icon: Heart, label: 'Compassionate Care', iconColor: '#F57C00', bg: 'rgba(245,124,0,0.15)' },
+  { icon: Users, label: 'Community First', iconColor: '#5DBB3F', bg: 'rgba(93,187,63,0.15)' },
+  { icon: Sparkles, label: 'Holistic Approach', iconColor: '#1E88E5', bg: 'rgba(30,136,229,0.15)' },
 ]
 
-const LogoBig = () => (
-  <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 mx-auto drop-shadow-xl">
-    <circle cx="140" cy="140" r="135" fill="url(#aboutCircleGrad)" />
-    <circle cx="140" cy="140" r="105" fill="white" opacity="0.1" />
-    <circle cx="140" cy="140" r="75" fill="white" opacity="0.15" />
-
-    {/* Cross arms */}
-    <rect x="118" y="72" width="44" height="136" rx="10" fill="white" opacity="0.95" />
-    <rect x="72" y="118" width="136" height="44" rx="10" fill="white" opacity="0.95" />
-
-    {/* Center circle */}
-    <circle cx="140" cy="140" r="22" fill="url(#centerGrad)" />
-    <path d="M140 128 C134 128 130 132 130 136 C130 142 140 150 140 150 C140 150 150 142 150 136 C150 132 146 128 140 128Z" fill="white" />
-
-    {/* Outer ring dots */}
-    <circle cx="140" cy="20" r="6" fill="white" opacity="0.4" />
-    <circle cx="260" cy="140" r="6" fill="white" opacity="0.4" />
-    <circle cx="140" cy="260" r="6" fill="white" opacity="0.4" />
-    <circle cx="20" cy="140" r="6" fill="white" opacity="0.4" />
-
-    <defs>
-      <linearGradient id="aboutCircleGrad" x1="0" y1="0" x2="280" y2="280">
-        <stop stopColor="#0a3d2b" />
-        <stop offset="0.5" stopColor="#0d5c3a" />
-        <stop offset="1" stopColor="#0d9488" />
-      </linearGradient>
-      <linearGradient id="centerGrad" x1="0" y1="0" x2="44" y2="44">
-        <stop stopColor="#0d9488" />
-        <stop offset="1" stopColor="#14b8a6" />
-      </linearGradient>
-    </defs>
-  </svg>
-)
-
 export default function About() {
-  const [ref, inView] = useInView({ threshold: 0.15, triggerOnce: true })
+  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true })
 
-  const slideLeft = {
-    hidden: { x: -60, opacity: 0 },
-    show: { x: 0, opacity: 1, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
-  }
-  const slideRight = {
-    hidden: { x: 60, opacity: 0 },
-    show: { x: 0, opacity: 1, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
-  }
+  const makeAnim = (dir) => ({
+    hidden: { x: isMobile ? 0 : (dir === 'left' ? -60 : 60), opacity: 0 },
+    show: { x: 0, opacity: 1, transition: { duration: isMobile ? 0.3 : 0.7, ease: [0.22, 1, 0.36, 1] } },
+  })
   const stagger = {
     hidden: {},
-    show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+    show: { transition: { staggerChildren: isMobile ? 0 : 0.09, delayChildren: 0.1 } },
   }
   const fadeUp = {
-    hidden: { y: 30, opacity: 0 },
-    show: { y: 0, opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
+    hidden: { y: isMobile ? 0 : 25, opacity: 0 },
+    show: { y: 0, opacity: 1, transition: { duration: isMobile ? 0.3 : 0.55, ease: 'easeOut' } },
   }
 
   return (
-    <section id="about" ref={ref} className="py-20 lg:py-28 bg-white relative overflow-hidden">
-      {/* Subtle background */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary-light to-transparent opacity-40 pointer-events-none" />
+    <section id="about" ref={ref} className="py-16 lg:py-24 bg-white relative overflow-hidden">
+      {/* Subtle right tint */}
+      <div className="absolute top-0 right-0 w-1/3 h-full pointer-events-none"
+        style={{ background: 'linear-gradient(to left, #f0f7f0, transparent)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
 
-          {/* Left: Logo Visual */}
+          {/* Left: Icon.png in dark card */}
           <motion.div
-            variants={slideLeft}
+            variants={makeAnim('left')}
             initial="hidden"
             animate={inView ? 'show' : 'hidden'}
-            className="relative flex flex-col items-center"
+            className="flex flex-col items-center"
           >
-            {/* Main icon card */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-[2rem] blur-2xl opacity-20 scale-110" />
-              <div className="relative bg-gradient-to-br from-primary via-primary-medium to-accent rounded-[2rem] p-8 sm:p-10">
-                <LogoBig />
+            <div className="relative w-full max-w-sm">
+              {/* Glow */}
+              <div className="absolute inset-0 rounded-3xl blur-2xl opacity-20 scale-110"
+                style={{ background: 'linear-gradient(135deg, #5DBB3F, #1E88E5)' }} />
 
-                {/* Mission quote overlay */}
-                <div className="mt-4 bg-white/15 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-                  <p className="text-white/90 text-sm font-medium italic leading-relaxed">
-                    "आरोग्य मित्र — Because every life deserves quality care"
+              {/* Dark card with icon */}
+              <div className="relative rounded-3xl p-8 sm:p-10" style={{ backgroundColor: '#161b22', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="flex justify-center mb-6">
+                  <img
+                    src="/icon.png"
+                    alt="Aarogya Mitra Logo"
+                    className="w-40 h-40 object-contain rounded-2xl"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+
+                {/* Mission quote */}
+                <div className="text-center border-t pt-5" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+                  <p className="text-white/70 text-sm font-medium italic leading-relaxed">
+                    &ldquo;आरोग्य मित्र — Because every life deserves quality care&rdquo;
                   </p>
+                </div>
+
+                {/* Stat chips */}
+                <div className="flex gap-3 mt-5 justify-center">
+                  {[['10K+', 'Patients', '#5DBB3F'], ['95%', 'Satisfied', '#1E88E5'], ['6+', 'Years', '#F57C00']].map(([val, lbl, col]) => (
+                    <div key={lbl} className="flex-1 text-center py-3 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.04)' }}>
+                      <div className="font-display font-bold text-xl" style={{ color: col }}>{val}</div>
+                      <div className="text-gray-500 text-xs mt-0.5">{lbl}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Floating value cards */}
-            <div className="mt-8 grid grid-cols-3 gap-3 w-full max-w-sm">
-              {values.map(({ icon: Icon, label, color, delay }) => (
+            {/* Value cards */}
+            <div className="mt-6 grid grid-cols-3 gap-3 w-full max-w-sm">
+              {values.map(({ icon: Icon, label, iconColor, bg }, i) => (
                 <motion.div
                   key={label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ delay: 0.5 + delay, duration: 0.5 }}
-                  className="flex flex-col items-center gap-2 p-3 bg-white rounded-xl shadow-lg border border-gray-100 text-center"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                  transition={{ delay: 0.4 + i * 0.1, duration: 0.45 }}
+                  className="flex flex-col items-center gap-2 p-3 bg-white rounded-xl shadow-md border border-gray-100 text-center"
                 >
-                  <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${color} flex items-center justify-center`}>
-                    <Icon className="w-4 h-4 text-white" />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: bg }}>
+                    <Icon className="w-4 h-4" style={{ color: iconColor }} />
                   </div>
                   <span className="text-gray-700 font-medium text-xs leading-tight">{label}</span>
                 </motion.div>
@@ -125,51 +111,51 @@ export default function About() {
             variants={stagger}
             initial="hidden"
             animate={inView ? 'show' : 'hidden'}
-            className="space-y-6"
+            className="space-y-5"
           >
             <motion.div variants={fadeUp} className="space-y-2">
-              <span className="inline-block px-3 py-1 bg-primary-light text-primary rounded-full text-sm font-semibold">
+              <span className="inline-block px-3 py-1 rounded-full text-sm font-semibold"
+                style={{ backgroundColor: '#f0f7f0', color: '#5DBB3F', border: '1px solid #d4edcc' }}>
                 Our Story
               </span>
               <h2 className="font-display font-bold text-3xl sm:text-4xl text-gray-900 leading-tight">
                 Founded to bridge the{' '}
-                <span className="text-gradient bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  healthcare gap
-                </span>
+                <span style={{ color: '#5DBB3F' }}>healthcare gap</span>
               </h2>
             </motion.div>
 
             <motion.p variants={fadeUp} className="text-gray-600 leading-relaxed text-base lg:text-lg">
               Aarogya Mitra Healthcare Foundation was born from a simple observation — millions of families
-              in Nagpur and across India struggle to access even basic healthcare. Founded in 2018, we set out
-              with a powerful mission: to make quality healthcare <strong className="text-gray-800">accessible and affordable</strong> for every
-              individual, regardless of their economic status.
+              in Nagpur struggle to access even basic healthcare. Founded in 2026, we set out with one mission:
+              make quality healthcare <strong className="text-gray-800">accessible and affordable</strong> for every individual,
+              regardless of their economic status.
             </motion.p>
 
             <motion.p variants={fadeUp} className="text-gray-600 leading-relaxed">
               From our base at LIG Quarters, Rambag Colony, we have grown from a small volunteer group
               into a trusted healthcare partner for over 10,000 patients. We navigate the complex maze of
-              hospitals, government schemes, and medical systems — so you don't have to do it alone.
+              hospitals, government schemes, and medical systems — so you never have to do it alone.
             </motion.p>
 
             {/* Checklist */}
-            <motion.div variants={fadeUp} className="space-y-3">
+            <motion.div variants={fadeUp} className="space-y-2.5">
               <h3 className="font-display font-semibold text-gray-900 text-lg">What we do for you</h3>
-              <div className="grid sm:grid-cols-2 gap-2.5">
+              <div className="grid sm:grid-cols-2 gap-2">
                 {checklist.map((item) => (
-                  <div key={item} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                  <div key={item} className="flex items-start gap-2.5">
+                    <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#5DBB3F' }} />
                     <span className="text-gray-600 text-sm leading-snug">{item}</span>
                   </div>
                 ))}
               </div>
             </motion.div>
 
-            {/* CTA */}
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-4 pt-2">
+            {/* CTAs */}
+            <motion.div variants={fadeUp} className="flex flex-wrap gap-3 pt-1">
               <a
                 href="tel:+9108149584719"
-                className="px-6 py-3 bg-primary hover:bg-primary-medium text-white rounded-full font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-primary/30 text-sm"
+                className="px-6 py-3 text-white rounded-full font-semibold text-sm transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                style={{ backgroundColor: '#5DBB3F' }}
               >
                 Talk to Us
               </a>
@@ -177,7 +163,8 @@ export default function About() {
                 href="https://wa.me/919108149584719"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 border-2 border-primary text-primary hover:bg-primary-light rounded-full font-semibold transition-all duration-200 text-sm"
+                className="px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border-2"
+                style={{ borderColor: '#5DBB3F', color: '#5DBB3F' }}
               >
                 WhatsApp Us
               </a>
