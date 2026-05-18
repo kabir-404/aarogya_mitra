@@ -109,7 +109,7 @@ export default function About() {
               initial="hidden"
               animate={inView ? "visible" : "hidden"}
               transition={{ delay: 0.26 }}
-              className="flex flex-wrap gap-3 pt-1"
+              className="flex flex-wrap gap-3 pt-1 items-center justify-center sm:justify-start sm:items-start"
             >
               <a
                 href="tel:+919108149584719"
