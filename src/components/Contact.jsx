@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import {
   MapPin, Phone, Mail, Instagram, Clock,
-  Send, CheckCircle, AlertCircle, MessageCircle
+  Send, CheckCircle, AlertCircle, Navigation
 } from 'lucide-react'
+import WhatsAppIcon from '../icons/WhatsAppIcon'
 
 const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
@@ -18,14 +19,15 @@ const contactCards = [
     icon: MapPin,
     title: 'Address',
     lines: ['LIG Quarters, Rambag Colony,', 'Jattarodi Road, Medical Square,', 'Nagpur – 440003'],
+    href: 'https://www.google.com/maps?q=21.130990,79.099616',
     bg: '#f0faf0',
     iconColor: '#5DBB3F',
   },
   {
     icon: Phone,
     title: 'Phone',
-    lines: ['+91 08149584719'],
-    href: 'tel:+919108149584719',
+    lines: ['+91 8149584719'],
+    href: 'tel:+918149584719',
     bg: '#e8f5e9',
     iconColor: '#5DBB3F',
   },
@@ -63,7 +65,7 @@ function ContactCard({ card, i, inView }) {
       animate={inView ? 'visible' : 'hidden'}
       transition={{ delay: isMobile ? 0 : i * 0.07 }}
       className="rounded-2xl p-4 flex items-start gap-3 border border-white hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
-      style={{ backgroundColor: bg, cursor: href ? 'pointer' : 'default' }}
+      style={{ backgroundColor: bg, cursor: href ? 'pointer' : 'default', minHeight: '48px' }}
     >
       <div
         className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -108,7 +110,12 @@ export default function Contact() {
     const errs = validate()
     if (Object.keys(errs).length > 0) { setErrors(errs); return }
     setLoading(true)
-    setTimeout(() => { setLoading(false); setSubmitted(true); setFormData({ name: '', phone: '', message: '' }); setErrors({}) }, 1400)
+    setTimeout(() => {
+      setLoading(false)
+      setSubmitted(true)
+      setFormData({ name: '', phone: '', message: '' })
+      setErrors({})
+    }, 1400)
   }
 
   const handleChange = (e) => {
@@ -117,7 +124,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-14 lg:py-24 bg-white">
+    <section id="contact" className="py-12 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -134,10 +141,10 @@ export default function Contact() {
           >
             Contact Us
           </span>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-gray-900 mb-3">
+          <h2 className="font-display font-bold text-2xl sm:text-4xl text-gray-900 mb-3">
             We&apos;re here to <span style={{ color: '#5DBB3F' }}>help you</span>
           </h2>
-          <p className="text-gray-500 text-base max-w-lg mx-auto">
+          <p className="text-gray-500 text-sm max-w-lg mx-auto">
             Reach out anytime. Our team is ready to guide you.
           </p>
         </motion.div>
@@ -146,20 +153,20 @@ export default function Contact() {
         <div className="md:hidden flex flex-col gap-3 mb-8">
           <p className="text-center font-semibold text-gray-900 text-base">Need help? Contact us directly</p>
           <a
-            href="tel:+919108149584719"
+            href="tel:+918149584719"
             className="w-full flex items-center justify-center gap-2.5 py-4 text-white rounded-2xl font-bold text-base"
-            style={{ backgroundColor: '#5DBB3F' }}
+            style={{ backgroundColor: '#5DBB3F', minHeight: '48px' }}
           >
             <Phone className="w-5 h-5" /> Call Now — Free
           </a>
           <a
-            href="https://wa.me/919108149584719"
+            href="https://wa.me/918149584719"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full flex items-center justify-center gap-2.5 py-4 text-white rounded-2xl font-bold text-base"
-            style={{ backgroundColor: '#25d366' }}
+            style={{ backgroundColor: '#25d366', minHeight: '48px' }}
           >
-            <MessageCircle className="w-5 h-5" /> WhatsApp Us
+            <WhatsAppIcon className="w-5 h-5" /> WhatsApp Us
           </a>
         </div>
 
@@ -184,14 +191,33 @@ export default function Contact() {
             >
               <iframe
                 title="Aarogya Mitra Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.5!2d79.099616!3d21.130990!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDA3JzUxLjYiTiA3OcKwMDUnNTguNiJF!5e0!3m2!1sen!2sin!4v1700000000000"
+                src="https://maps.google.com/maps?q=21.130990,79.099616&z=16&output=embed"
                 width="100%"
-                height="200"
+                height="250"
                 style={{ border: 0, display: 'block' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
+            </motion.div>
+
+            {/* Get Directions */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+              transition={{ delay: 0.5 }}
+            >
+              <a
+                href="https://www.google.com/maps/dir/?api=1&destination=21.130990,79.099616"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold border-2 transition-all duration-200 hover:shadow-md"
+                style={{ borderColor: '#5DBB3F', color: '#5DBB3F', minHeight: '48px' }}
+              >
+                <Navigation className="w-4 h-4" />
+                Get Directions
+              </a>
             </motion.div>
           </div>
 
@@ -283,7 +309,7 @@ export default function Contact() {
                     type="submit"
                     disabled={loading}
                     className="w-full flex items-center justify-center gap-2 py-3.5 text-white rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-70 active:scale-95"
-                    style={{ backgroundColor: '#5DBB3F' }}
+                    style={{ backgroundColor: '#5DBB3F', minHeight: '48px' }}
                   >
                     {loading ? (
                       <>

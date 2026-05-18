@@ -7,17 +7,18 @@
 
 html {
   overflow-x: hidden;
-  width: 100%;
+  max-width: 100%;
   scroll-behavior: smooth;
 }
 
 body {
   overflow-x: hidden;
-  width: 100%;
+  max-width: 100%;
   position: relative;
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* ── iOS zoom fix (critical) ─────────────────────── */
@@ -37,6 +38,23 @@ input, textarea, select {
   animation: illustrationFloat 4s ease-in-out infinite;
 }
 
+/* ── Mobile hero animations ──────────────────────── */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes pulse-heart {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.12); }
+}
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+}
+.float-gentle  { animation: float-gentle 3s ease-in-out infinite; }
+.pulse-heart   { animation: pulse-heart 2s ease-in-out infinite; }
+.orbit-cross   { animation: orbit 8s linear infinite; }
+
 /* ── WhatsApp FAB pulse ring ─────────────────────── */
 @keyframes pulseRing {
   0%   { transform: scale(1); opacity: 0.7; }
@@ -51,6 +69,44 @@ input, textarea, select {
   animation: pulseRing 2s ease-out infinite;
   z-index: -1;
 }
+
+/* ── Marquee ─────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+@media (max-width: 767px) {
+  .marquee-track { animation-duration: 20s; }
+}
+
+/* ── CSS scroll reveal (mobile) ──────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+.animate-fadeInUp-delay-1 { animation-delay: 0.1s; opacity: 0; animation-fill-mode: forwards; }
+.animate-fadeInUp-delay-2 { animation-delay: 0.2s; opacity: 0; animation-fill-mode: forwards; }
+.animate-fadeInUp-delay-3 { animation-delay: 0.3s; opacity: 0; animation-fill-mode: forwards; }
+
+/* ── Service card tap feedback ───────────────────── */
+.service-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.service-card:active { transform: scale(0.97); }
+
+/* ── Testimonial horizontal scroll snap ──────────── */
+.testimonial-scroll {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.testimonial-card { scroll-snap-align: start; }
 
 /* ── Scrollbar ───────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; }

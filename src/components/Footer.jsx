@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Phone, Mail, MapPin, Instagram, Heart, MessageCircle } from 'lucide-react'
+import WhatsAppIcon from '../icons/WhatsAppIcon'
 
 const footerLinks = {
   Services: [
@@ -57,24 +58,25 @@ export default function Footer() {
             </div>
             <div className="flex flex-wrap justify-center gap-3">
               <a
-                href="tel:+919108149584719"
+                href="tel:+918149584719"
                 className="flex items-center gap-2 px-5 py-3 text-white rounded-full font-semibold text-sm transition-all duration-200 hover:scale-105 hover:shadow-lg"
-                style={{ backgroundColor: '#5DBB3F' }}
+                style={{ backgroundColor: '#5DBB3F', minHeight: '48px' }}
               >
                 <Phone className="w-4 h-4" /> Call Now
               </a>
               <a
-                href="https://wa.me/919108149584719"
+                href="https://wa.me/918149584719"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-5 py-3 text-white rounded-full font-semibold text-sm transition-all duration-200 hover:scale-105"
-                style={{ backgroundColor: '#25d366' }}
+                style={{ backgroundColor: '#25d366', minHeight: '48px' }}
               >
-                <MessageCircle className="w-4 h-4" /> WhatsApp Us
+                <WhatsAppIcon className="w-4 h-4" /> WhatsApp Us
               </a>
               <a
                 href="mailto:support@aarogyamitrangp.co.in"
                 className="flex items-center gap-2 px-5 py-3 text-white rounded-full font-semibold text-sm border border-white/20 hover:bg-white/10 transition-all duration-200"
+                style={{ minHeight: '48px' }}
               >
                 <Mail className="w-4 h-4" /> Email Us
               </a>
@@ -95,6 +97,7 @@ export default function Footer() {
                 alt="Aarogya Mitra"
                 className="h-12 w-12 object-contain"
                 loading="lazy"
+                decoding="async"
               />
               <div>
                 <div className="font-display font-bold text-lg leading-tight">
@@ -111,18 +114,23 @@ export default function Footer() {
             </p>
 
             <div className="space-y-2.5">
-              <a href="tel:+919108149584719" className="flex items-center gap-2.5 text-white/50 hover:text-white text-sm transition-colors">
+              <a href="tel:+918149584719" className="flex items-center gap-2.5 text-white/50 hover:text-white text-sm transition-colors">
                 <Phone className="w-4 h-4 flex-shrink-0" style={{ color: '#5DBB3F' }} />
-                +91 08149584719
+                +91 8149584719
               </a>
               <a href="mailto:support@aarogyamitrangp.co.in" className="flex items-center gap-2.5 text-white/50 hover:text-white text-sm transition-colors">
                 <Mail className="w-4 h-4 flex-shrink-0" style={{ color: '#1E88E5' }} />
                 support@aarogyamitrangp.co.in
               </a>
-              <div className="flex items-start gap-2.5 text-white/50 text-sm">
+              <a
+                href="https://www.google.com/maps?q=21.130990,79.099616"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-start gap-2.5 text-white/50 hover:text-white text-sm transition-colors"
+              >
                 <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#F57C00' }} />
                 <span>LIG Quarters, Rambag Colony, Jattarodi Road, Medical Square, Nagpur 440003</span>
-              </div>
+              </a>
               <a
                 href="https://www.instagram.com/aarogya_mitra_healthcare?igsh=MW95NjBkdnJwa2h0Yg=="
                 target="_blank"
@@ -155,12 +163,14 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="relative z-10 border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-white/30 text-xs text-center sm:text-left">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col items-center gap-2">
+          <p className="text-white/30 text-xs text-center">
             © {new Date().getFullYear()} Aarogya Mitra Healthcare Foundation. All rights reserved.
           </p>
-          <p className="text-white/30 text-xs flex items-center gap-1">
-            Made with <Heart className="w-3 h-3 fill-rose-400 text-rose-400 mx-0.5" /> for Nagpur
+          <p className="flex items-center justify-center gap-1.5 text-white/50 text-xs">
+            Made with
+            <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400 animate-pulse mx-0.5" />
+            for patients
           </p>
         </div>
       </div>

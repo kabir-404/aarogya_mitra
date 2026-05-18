@@ -1,13 +1,15 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-scroll'
-import { Phone, ChevronDown, MessageCircle } from 'lucide-react'
+import { Phone, ChevronDown } from 'lucide-react'
 import DoctorHero from '../illustrations/DoctorHero'
+import MobileHeroIllustration from '../illustrations/MobileHeroIllustration'
+import WhatsAppIcon from '../icons/WhatsAppIcon'
 
 const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
 const fadeUp = {
-  hidden: { opacity: 0, y: isMobile ? 0 : 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+  hidden: { opacity: 0, y: isMobile ? 12 : 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: isMobile ? 0.35 : 0.5, ease: 'easeOut' } },
 }
 
 const container = {
@@ -15,7 +17,7 @@ const container = {
   visible: { transition: { staggerChildren: isMobile ? 0 : 0.1, delayChildren: 0.1 } },
 }
 
-const trustPills = ['Free', 'Nagpur Based', 'Est. 2026']
+const trustPills = ['Free Service', 'Nagpur Based', 'Est. 2026']
 
 export default function Hero() {
   return (
@@ -37,24 +39,19 @@ export default function Hero() {
         </>
       )}
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 lg:py-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8 lg:py-20">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 
-          {/* ── Left content ── */}
+          {/* ── Left / Mobile content ── */}
           <motion.div
             variants={container}
             initial="hidden"
             animate="visible"
-            className="space-y-5 text-center lg:text-left"
+            className="space-y-4 text-center lg:text-left"
           >
-            {/* Mobile: small logo at top */}
-            <motion.div variants={fadeUp} className="flex justify-center lg:hidden">
-              <img
-                src="/icon.png"
-                alt="Aarogya Mitra"
-                className="h-16 w-16 object-contain"
-                loading="eager"
-              />
+            {/* Mobile: animated illustration at top */}
+            <motion.div variants={fadeUp} className="lg:hidden">
+              <MobileHeroIllustration />
             </motion.div>
 
             {/* Category pill */}
@@ -63,14 +60,15 @@ export default function Hero() {
                 className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold"
                 style={{ backgroundColor: '#e8f5e9', color: '#5DBB3F', border: '1px solid #c8e6c9' }}
               >
-                🏥 NGO · Healthcare · Nagpur
+                NGO · Healthcare · Nagpur
               </span>
             </motion.div>
 
             {/* Headline */}
             <motion.h1
               variants={fadeUp}
-              className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl leading-tight text-gray-900"
+              className="font-display font-bold text-3xl lg:text-5xl leading-tight text-gray-900"
+              style={{ lineHeight: 1.2 }}
             >
               <span style={{ color: '#5DBB3F' }}>आरोग्य</span>
               {' '}
@@ -81,7 +79,7 @@ export default function Hero() {
             {/* Subtext */}
             <motion.p
               variants={fadeUp}
-              className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-lg mx-auto lg:mx-0"
+              className="text-sm lg:text-base text-gray-600 leading-relaxed max-w-lg mx-auto lg:mx-0"
             >
               Making quality healthcare{' '}
               <strong className="text-gray-800">accessible &amp; affordable</strong>{' '}
@@ -91,25 +89,26 @@ export default function Hero() {
             {/* CTAs */}
             <motion.div
               variants={fadeUp}
+              id="hero-cta-buttons"
               className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
             >
               <a
-                href="tel:+919108149584719"
-                className="flex items-center justify-center gap-2.5 px-6 py-4 rounded-full font-bold text-white text-sm sm:text-base transition-all duration-200 hover:scale-105 hover:shadow-lg w-full sm:w-auto"
-                style={{ backgroundColor: '#5DBB3F' }}
+                href="tel:+918149584719"
+                className="flex items-center justify-center gap-2 px-6 py-4 rounded-full font-bold text-white text-sm sm:text-base transition-all duration-200 hover:scale-105 hover:shadow-lg w-full sm:w-auto"
+                style={{ backgroundColor: '#5DBB3F', minHeight: '48px' }}
               >
-                <Phone className="w-4 h-4" />
-                📞 Call Now — It&apos;s Free
+                <Phone className="w-5 h-5" />
+                Call Now — It&apos;s Free
               </a>
               <a
-                href="https://wa.me/919108149584719"
+                href="https://wa.me/918149584719"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2.5 px-6 py-4 rounded-full font-bold text-white text-sm sm:text-base transition-all duration-200 hover:scale-105 w-full sm:w-auto"
-                style={{ backgroundColor: '#25d366' }}
+                className="flex items-center justify-center gap-2 px-6 py-4 rounded-full font-bold text-white text-sm sm:text-base transition-all duration-200 hover:scale-105 w-full sm:w-auto"
+                style={{ backgroundColor: '#25d366', minHeight: '48px' }}
               >
-                <MessageCircle className="w-4 h-4" />
-                💬 WhatsApp Us
+                <WhatsAppIcon className="w-5 h-5" />
+                WhatsApp Us
               </a>
             </motion.div>
 

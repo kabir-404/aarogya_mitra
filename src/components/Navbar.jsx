@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-scroll'
-import { Phone, Menu, X, MessageCircle } from 'lucide-react'
+import { Phone, Menu, X } from 'lucide-react'
+import WhatsAppIcon from '../icons/WhatsAppIcon'
 
 const navLinks = [
   { name: 'Home',     to: 'home'     },
@@ -47,7 +48,7 @@ export default function Navbar() {
                   <span className="font-bold text-xl" style={{ color: '#5DBB3F' }}>Aarogya</span>
                   <span className="font-bold text-xl ml-1" style={{ color: '#1E88E5' }}>Mitra</span>
                 </div>
-                <div className="text-xs text-gray-400 tracking-widest uppercase" style={{ fontSize: '10px' }}>
+                <div className="text-gray-400 tracking-widest uppercase" style={{ fontSize: '10px' }}>
                   Healthcare Services
                 </div>
               </div>
@@ -76,11 +77,11 @@ export default function Navbar() {
             {/* Phone + CTA — desktop */}
             <div className="hidden lg:flex items-center gap-4">
               <a
-                href="tel:+919108149584719"
+                href="tel:+918149584719"
                 className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
               >
                 <Phone className="w-4 h-4" style={{ color: '#5DBB3F' }} />
-                +91 08149584719
+                +91 8149584719
               </a>
               <Link
                 to="contact"
@@ -99,6 +100,7 @@ export default function Navbar() {
               onClick={() => setMenuOpen(!menuOpen)}
               className="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
               aria-label="Toggle menu"
+              style={{ minHeight: '48px', minWidth: '48px' }}
             >
               <AnimatePresence mode="wait" initial={false}>
                 {menuOpen ? (
@@ -138,10 +140,8 @@ export default function Navbar() {
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40 bg-white flex flex-col lg:hidden overflow-y-auto"
           >
-            {/* Spacer for navbar height */}
             <div className="h-16" />
 
-            {/* Nav links */}
             <div className="flex-1 flex flex-col px-6 pt-4">
               {navLinks.map((link, i) => (
                 <motion.div
@@ -157,15 +157,13 @@ export default function Navbar() {
                     duration={600}
                     offset={-72}
                     onClick={() => setMenuOpen(false)}
-                    className="block py-4 text-xl font-semibold text-gray-800 hover:text-brand-green cursor-pointer transition-colors"
-                    style={{ '--tw-hover-text-opacity': 1 }}
+                    className="block py-4 text-xl font-semibold text-gray-800 cursor-pointer"
                   >
                     {link.name}
                   </Link>
                 </motion.div>
               ))}
 
-              {/* Contact info */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -174,11 +172,11 @@ export default function Navbar() {
               >
                 <p className="text-gray-400 text-xs uppercase tracking-wider mb-2">Call anytime</p>
                 <a
-                  href="tel:+919108149584719"
+                  href="tel:+918149584719"
                   className="text-gray-900 font-semibold text-lg flex items-center gap-2"
                 >
                   <Phone className="w-5 h-5" style={{ color: '#5DBB3F' }} />
-                  +91 08149584719
+                  +91 8149584719
                 </a>
               </motion.div>
             </div>
@@ -191,24 +189,24 @@ export default function Navbar() {
               className="px-6 pb-28 pt-4 flex flex-col gap-3"
             >
               <a
-                href="tel:+919108149584719"
+                href="tel:+918149584719"
                 onClick={() => setMenuOpen(false)}
                 className="w-full text-white text-center py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2"
-                style={{ backgroundColor: '#5DBB3F' }}
+                style={{ backgroundColor: '#5DBB3F', minHeight: '48px' }}
               >
                 <Phone className="w-5 h-5" />
-                📞 Call: +91 08149584719
+                Call: +91 8149584719
               </a>
               <a
-                href="https://wa.me/919108149584719"
+                href="https://wa.me/918149584719"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMenuOpen(false)}
                 className="w-full text-white text-center py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2"
-                style={{ backgroundColor: '#25d366' }}
+                style={{ backgroundColor: '#25d366', minHeight: '48px' }}
               >
-                <MessageCircle className="w-5 h-5" />
-                💬 WhatsApp Us
+                <WhatsAppIcon className="w-5 h-5" />
+                WhatsApp Us
               </a>
             </motion.div>
           </motion.div>
