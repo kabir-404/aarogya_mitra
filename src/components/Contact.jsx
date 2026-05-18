@@ -8,28 +8,33 @@ import {
 
 const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
+const fadeUp = {
+  hidden:  { opacity: 0, y: isMobile ? 0 : 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+}
+
 const contactCards = [
   {
     icon: MapPin,
-    title: 'Our Address',
-    lines: ['LIG Quarters, Rambag Colony,', 'Jattarodi Road, Medical Square,', 'Nagpur – 440003, Maharashtra'],
-    bg: '#f0f7f0',
+    title: 'Address',
+    lines: ['LIG Quarters, Rambag Colony,', 'Jattarodi Road, Medical Square,', 'Nagpur – 440003'],
+    bg: '#f0faf0',
     iconColor: '#5DBB3F',
   },
   {
     icon: Phone,
-    title: 'Call / WhatsApp',
+    title: 'Phone',
     lines: ['+91 08149584719'],
-    href: 'tel:+9108149584719',
+    href: 'tel:+919108149584719',
     bg: '#e8f5e9',
     iconColor: '#5DBB3F',
   },
   {
     icon: Mail,
-    title: 'Email Us',
+    title: 'Email',
     lines: ['support@aarogyamitrangp.co.in'],
     href: 'mailto:support@aarogyamitrangp.co.in',
-    bg: '#e3f2fd',
+    bg: '#eff6ff',
     iconColor: '#1E88E5',
   },
   {
@@ -37,36 +42,39 @@ const contactCards = [
     title: 'Instagram',
     lines: ['@aarogya_mitra_healthcare'],
     href: 'https://www.instagram.com/aarogya_mitra_healthcare?igsh=MW95NjBkdnJwa2h0Yg==',
-    bg: '#fce4ec',
+    bg: '#fff0f5',
     iconColor: '#e91e63',
   },
   {
     icon: Clock,
-    title: 'Working Hours',
-    lines: ['Mon – Sat: 9:00 AM – 7:00 PM', 'Sunday: Camp Days Only'],
-    bg: '#fff8e1',
+    title: 'Hours',
+    lines: ['Mon–Sat: 9 AM – 7 PM', 'Sunday: Camp Days Only'],
+    bg: '#fff7ed',
     iconColor: '#F57C00',
   },
 ]
 
-function ContactCard({ card, index, inView }) {
+function ContactCard({ card, i, inView }) {
   const { icon: Icon, title, lines, href, bg, iconColor } = card
   const inner = (
     <motion.div
-      initial={{ opacity: 0, y: isMobile ? 0 : 35 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: isMobile ? 0.3 : 0.5, delay: isMobile ? 0 : index * 0.09 }}
-      className="rounded-2xl p-4 flex items-start gap-3 border border-white hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+      variants={fadeUp}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      transition={{ delay: isMobile ? 0 : i * 0.07 }}
+      className="rounded-2xl p-4 flex items-start gap-3 border border-white hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
       style={{ backgroundColor: bg, cursor: href ? 'pointer' : 'default' }}
     >
-      <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-        style={{ backgroundColor: iconColor, opacity: 1 }}>
+      <div
+        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+        style={{ backgroundColor: iconColor }}
+      >
         <Icon className="w-5 h-5 text-white" />
       </div>
       <div>
         <div className="font-semibold text-gray-900 text-sm mb-0.5">{title}</div>
-        {lines.map((line) => (
-          <div key={line} className="text-gray-600 text-xs leading-snug">{line}</div>
+        {lines.map((l) => (
+          <div key={l} className="text-gray-600 text-xs leading-snug">{l}</div>
         ))}
       </div>
     </motion.div>
@@ -81,18 +89,18 @@ function ContactCard({ card, index, inView }) {
 export default function Contact() {
   const [ref, inView] = useInView({ threshold: 0.08, triggerOnce: true })
   const [formData, setFormData] = useState({ name: '', phone: '', message: '' })
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors]     = useState({})
   const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading]   = useState(false)
 
   const validate = () => {
-    const errs = {}
-    if (!formData.name.trim()) errs.name = 'Name is required'
-    if (!formData.phone.trim()) errs.phone = 'Phone number is required'
-    else if (!/^[0-9+\s-]{10,15}$/.test(formData.phone.trim())) errs.phone = 'Enter a valid phone number'
-    if (!formData.message.trim()) errs.message = 'Message is required'
-    else if (formData.message.trim().length < 10) errs.message = 'Message should be at least 10 characters'
-    return errs
+    const e = {}
+    if (!formData.name.trim()) e.name = 'Name is required'
+    if (!formData.phone.trim()) e.phone = 'Phone number is required'
+    else if (!/^[0-9+\s-]{10,15}$/.test(formData.phone.trim())) e.phone = 'Enter a valid phone number'
+    if (!formData.message.trim()) e.message = 'Message is required'
+    else if (formData.message.trim().length < 10) e.message = 'Message too short'
+    return e
   }
 
   const handleSubmit = (e) => {
@@ -100,12 +108,7 @@ export default function Contact() {
     const errs = validate()
     if (Object.keys(errs).length > 0) { setErrors(errs); return }
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      setSubmitted(true)
-      setFormData({ name: '', phone: '', message: '' })
-      setErrors({})
-    }, 1400)
+    setTimeout(() => { setLoading(false); setSubmitted(true); setFormData({ name: '', phone: '', message: '' }); setErrors({}) }, 1400)
   }
 
   const handleChange = (e) => {
@@ -119,28 +122,31 @@ export default function Contact() {
 
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: isMobile ? 0 : 35 }}
+          initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: isMobile ? 0.3 : 0.65 }}
+          transition={{ duration: 0.5 }}
           className="text-center mb-10 lg:mb-14"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
-            style={{ backgroundColor: '#f0f7f0', color: '#5DBB3F', border: '1px solid #d4edcc' }}>
+          <span
+            className="inline-block px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
+            style={{ backgroundColor: '#f0faf0', color: '#5DBB3F', border: '1px solid #c8e6c9' }}
+          >
             Contact Us
           </span>
           <h2 className="font-display font-bold text-3xl sm:text-4xl text-gray-900 mb-3">
             We&apos;re here to <span style={{ color: '#5DBB3F' }}>help you</span>
           </h2>
           <p className="text-gray-500 text-base max-w-lg mx-auto">
-            Reach out anytime. Our team is ready to guide you through your healthcare needs.
+            Reach out anytime. Our team is ready to guide you.
           </p>
         </motion.div>
 
-        {/* Mobile: Quick action buttons */}
+        {/* Mobile: quick action buttons first */}
         <div className="md:hidden flex flex-col gap-3 mb-8">
+          <p className="text-center font-semibold text-gray-900 text-base">Need help? Contact us directly</p>
           <a
-            href="tel:+9108149584719"
+            href="tel:+919108149584719"
             className="w-full flex items-center justify-center gap-2.5 py-4 text-white rounded-2xl font-bold text-base"
             style={{ backgroundColor: '#5DBB3F' }}
           >
@@ -159,35 +165,28 @@ export default function Contact() {
 
         <div ref={ref} className="grid lg:grid-cols-2 gap-10 lg:gap-16">
 
-          {/* Left: Info + Map */}
-          <div className="space-y-4">
-            <motion.h3
-              initial={{ opacity: 0, x: isMobile ? 0 : -25 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: isMobile ? 0.3 : 0.55 }}
-              className="font-display font-semibold text-lg text-gray-900 mb-4"
-            >
-              Get in touch
-            </motion.h3>
-
+          {/* Left: info cards + map */}
+          <div className="space-y-3">
+            <h3 className="font-display font-semibold text-lg text-gray-900 mb-4 hidden md:block">Get in touch</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {contactCards.map((card, i) => (
-                <ContactCard key={card.title} card={card} index={i} inView={inView} />
+                <ContactCard key={card.title} card={card} i={i} inView={inView} />
               ))}
             </div>
 
             {/* Google Maps */}
             <motion.div
-              initial={{ opacity: 0, y: isMobile ? 0 : 25 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: isMobile ? 0.3 : 0.6, delay: 0.4 }}
-              className="rounded-2xl overflow-hidden shadow-lg border border-gray-200"
+              variants={fadeUp}
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+              transition={{ delay: 0.4 }}
+              className="rounded-2xl overflow-hidden shadow-md border border-gray-200"
             >
               <iframe
                 title="Aarogya Mitra Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.5!2d79.099616!3d21.130990!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDA3JzUxLjYiTiA3OcKwMDUnNTguNiJF!5e0!3m2!1sen!2sin!4v1700000000000"
                 width="100%"
-                height="180"
+                height="200"
                 style={{ border: 0, display: 'block' }}
                 allowFullScreen
                 loading="lazy"
@@ -196,12 +195,12 @@ export default function Contact() {
             </motion.div>
           </div>
 
-          {/* Right: Form */}
+          {/* Right: form */}
           <motion.div
-            initial={{ opacity: 0, x: isMobile ? 0 : 50 }}
+            initial={{ opacity: 0, x: isMobile ? 0 : 40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: isMobile ? 0.3 : 0.7 }}
-            className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-gray-100"
+            transition={{ duration: 0.6 }}
+            className="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-gray-100"
           >
             <h3 className="font-display font-semibold text-lg text-gray-900 mb-5">Send us a message</h3>
 
@@ -212,26 +211,25 @@ export default function Contact() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                   className="flex flex-col items-center justify-center py-14 gap-4 text-center"
                 >
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.1 }}
+                    transition={{ type: 'spring', stiffness: 240, damping: 18, delay: 0.1 }}
                     className="w-20 h-20 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: '#f0f7f0' }}
+                    style={{ backgroundColor: '#f0faf0' }}
                   >
                     <CheckCircle className="w-10 h-10" style={{ color: '#5DBB3F' }} />
                   </motion.div>
                   <div>
-                    <h4 className="font-display font-bold text-xl text-gray-900 mb-2">Message Received!</h4>
-                    <p className="text-gray-500 text-sm">Our team will reach out within 24 hours. Thank you for trusting Aarogya Mitra.</p>
+                    <h4 className="font-display font-bold text-xl text-gray-900 mb-1">Message Received!</h4>
+                    <p className="text-gray-500 text-sm">We will reach out within 24 hours.</p>
                   </div>
                   <button
                     onClick={() => setSubmitted(false)}
                     className="px-6 py-2.5 rounded-full text-sm font-semibold"
-                    style={{ backgroundColor: '#f0f7f0', color: '#5DBB3F' }}
+                    style={{ backgroundColor: '#f0faf0', color: '#5DBB3F' }}
                   >
                     Send Another
                   </button>
@@ -239,8 +237,8 @@ export default function Contact() {
               ) : (
                 <form key="form" onSubmit={handleSubmit} className="space-y-4">
                   {[
-                    { label: 'Full Name *', name: 'name', type: 'text', placeholder: 'e.g. Ramesh Sharma' },
-                    { label: 'Phone Number *', name: 'phone', type: 'tel', placeholder: 'e.g. +91 9876543210' },
+                    { label: 'Full Name *',    name: 'name',  type: 'text', placeholder: 'e.g. Ramesh Sharma' },
+                    { label: 'Phone Number *', name: 'phone', type: 'tel',  placeholder: 'e.g. +91 9876543210' },
                   ].map(({ label, name, type, placeholder }) => (
                     <div key={name}>
                       <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
@@ -250,8 +248,8 @@ export default function Contact() {
                         value={formData[name]}
                         onChange={handleChange}
                         placeholder={placeholder}
-                        className={`w-full px-4 py-3 rounded-xl border text-gray-900 placeholder-gray-400 outline-none transition-all duration-200 ${
-                          errors[name] ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 hover:border-gray-300 focus:border-brand-green focus:ring-2 focus:ring-brand-green/20'
+                        className={`w-full px-4 py-3 rounded-xl border text-gray-900 placeholder-gray-400 outline-none transition-all ${
+                          errors[name] ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 hover:border-gray-300 focus:border-[#5DBB3F] focus:ring-2 focus:ring-[#5DBB3F]/20'
                         }`}
                       />
                       {errors[name] && (
@@ -263,15 +261,15 @@ export default function Contact() {
                   ))}
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">How can we help? *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Message *</label>
                     <textarea
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       rows={4}
                       placeholder="Describe your healthcare need or query..."
-                      className={`w-full px-4 py-3 rounded-xl border text-gray-900 placeholder-gray-400 outline-none transition-all duration-200 resize-none ${
-                        errors.message ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 hover:border-gray-300 focus:border-brand-green focus:ring-2 focus:ring-brand-green/20'
+                      className={`w-full px-4 py-3 rounded-xl border text-gray-900 placeholder-gray-400 outline-none transition-all resize-none ${
+                        errors.message ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 hover:border-gray-300 focus:border-[#5DBB3F] focus:ring-2 focus:ring-[#5DBB3F]/20'
                       }`}
                     />
                     {errors.message && (
@@ -284,7 +282,7 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 text-white rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed active:scale-95"
+                    className="w-full flex items-center justify-center gap-2 py-3.5 text-white rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-70 active:scale-95"
                     style={{ backgroundColor: '#5DBB3F' }}
                   >
                     {loading ? (
@@ -299,14 +297,6 @@ export default function Contact() {
                       <><Send className="w-4 h-4" /> Send Message</>
                     )}
                   </button>
-
-                  <p className="text-center text-xs text-gray-400">
-                    Or reach us on{' '}
-                    <a href="https://wa.me/919108149584719" target="_blank" rel="noopener noreferrer"
-                      className="font-medium" style={{ color: '#25d366' }}>
-                      WhatsApp
-                    </a>
-                  </p>
                 </form>
               )}
             </AnimatePresence>
